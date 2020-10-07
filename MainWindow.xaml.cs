@@ -93,24 +93,8 @@ namespace D365_ExcelModifier
         #region Rules execution
         private void BTNExecuteRules_Click(object sender, RoutedEventArgs e)
         {
-            DocumentManager documentManager = new DocumentManager(DocumentRules);
-
-            /*using (var inputWorkbook = new XLWorkbook("input.xlsx"))
-            {
-                using (var outputWorkbook = new XLWorkbook("output.xlsx"))
-                {
-                    CopyInOtherFileRule rule = new CopyInOtherFileRule("InputColumn", "OutputColumn");
-                    CopyInOtherFileAction action = new CopyInOtherFileAction(rule, inputWorkbook.Worksheets, outputWorkbook.Worksheets);
-                    action.Execute();
-
-                    ValueChangementRule rule2 = new ValueChangementRule("InputColumn", "Tu pues","Gros PD");
-                    ValueChangingAction action2 = new ValueChangingAction(rule2, inputWorkbook.Worksheets);
-                    action2.Execute();
-
-                    outputWorkbook.Save();
-                    inputWorkbook.Save();
-                }
-            }*/
+            DocumentManager documentManager = new DocumentManager(DocumentRules, TBXInputFile.Text, TBXOutputFile.Text);
+            documentManager.ExecuteRules();
         }
         #endregion
     }

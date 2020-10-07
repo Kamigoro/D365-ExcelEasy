@@ -1,4 +1,6 @@
-﻿using D365_ExcelModifier.Models.DocumentRules;
+﻿using ClosedXML.Excel;
+using D365_ExcelModifier.Models.Actions;
+using D365_ExcelModifier.Models.DocumentRules;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,10 +9,12 @@ namespace D365_ExcelModifier.Models
 {
     public class DocumentManager
     {
+        public string InputFile { get; set; }
+        public string OutputFile { get; set; }
         private List<CopyInOtherFileRule> CopyInOtherFileRules { get; set; } = new List<CopyInOtherFileRule>();
         private List<ValueChangementRule> ValueChangementRules { get; set; } = new List<ValueChangementRule>();
 
-        public DocumentManager(List<DocumentRuleBase> baseRules)
+        public DocumentManager(List<DocumentRuleBase> baseRules, string inputFile, string outputFile)
         {
             foreach (DocumentRuleBase baseRule in baseRules)
             {
@@ -24,5 +28,30 @@ namespace D365_ExcelModifier.Models
                 }
             }
         }
+
+        public void ExecuteRules()
+        {
+            using (var inputWorkbook = new XLWorkbook(InputFile))
+            {
+                using (var outputWorkbook = new XLWorkbook(OutputFile))
+                {
+                    foreach (CopyInOtherFileRule copyInOtherFileRule in CopyInOtherFileRules)
+                    {
+                        CopyInOtherFileAction action = new CopyInOtherFileAction(rule, inputWorkbook.Worksheets, outputWorkbook.Worksheets);
+                        action.Execute();
+                    }
+
+                    foreach (ValueChangementRule valueChangementRule in ValueChangementRules)
+                    {
+                        ValueChangingAction action = new ValueChangingAction(valueChangementRule, inputWorkbook.Worksheets);
+                        action.Execute();
+                    }
+
+                    outputWorkbook.Save();
+                    inputWorkbook.Save();
+                }
+            }
+        }
+
     }
 }
