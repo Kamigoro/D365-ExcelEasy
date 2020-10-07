@@ -1,10 +1,11 @@
 ﻿namespace D365_ExcelModifier.Models.DocumentRules
 {
-    public class CopyInOtherFileRule : IDocumentRule
+    public class CopyInOtherFileRule : DocumentRuleBase
     {
-        public string InputFile { get; set; }
-        public string InputColumn { get; set; }
-        public string OutputFile { get; set; }
-        public string OutputColumn { get; set; }
+        public CopyInOtherFileRule(string inputColumn, string outputColumn)
+        {
+            InputColumn = inputColumn;
+            OutputColumn = outputColumn;
+        }
     }
 }

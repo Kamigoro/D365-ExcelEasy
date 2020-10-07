@@ -1,4 +1,7 @@
-﻿using D365_ExcelModifier.Models;
+﻿using ClosedXML.Excel;
+using D365_ExcelModifier.Models;
+using D365_ExcelModifier.Models.Actions;
+using D365_ExcelModifier.Models.DocumentRules;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -16,24 +19,24 @@ namespace D365_ExcelModifier
     public partial class MainWindow : Window
     {
 
-        private List<ReplacementRule> ReplacementRules = new List<ReplacementRule>();
+        private List<DocumentRuleBase> DocumentRules = new List<DocumentRuleBase>();
 
         public MainWindow()
         {
             InitializeComponent();
-            ReplacementItems.ItemsSource = ReplacementRules;
+            ReplacementItems.ItemsSource = DocumentRules;
         }
 
         #region Rules gui management
 
         private void BTNAddRule_Click(object sender, RoutedEventArgs e)
         {
-            ReplacementRules.Add(new ReplacementRule());
+            DocumentRules.Add(new DocumentRuleBase());
             RefreshRulesItem();
         }
         private void BTNRemoveRule_Click(object sender, RoutedEventArgs e)
         {
-            ReplacementRules.RemoveAt(ReplacementRules.Count - 1);
+            DocumentRules.RemoveAt(DocumentRules.Count - 1);
             RefreshRulesItem();
         }
 
@@ -42,7 +45,7 @@ namespace D365_ExcelModifier
             Dispatcher.BeginInvoke((Action)(() =>
             {
                 ReplacementItems.ItemsSource = null;
-                ReplacementItems.ItemsSource = ReplacementRules;
+                ReplacementItems.ItemsSource = DocumentRules;
             }));
         }
 
@@ -90,15 +93,22 @@ namespace D365_ExcelModifier
         #region Rules execution
         private void BTNExecuteRules_Click(object sender, RoutedEventArgs e)
         {
-            DocumentManager documentManager = new DocumentManager(TBXInputFile.Text);
-            Task.Run(() =>
+            /*using (var inputWorkbook = new XLWorkbook("input.xlsx"))
             {
-                documentManager.ExecuteRules(ReplacementRules);
-            }).ContinueWith((task) =>
-            {
-                Debug.WriteLine("C'est fini");
-            });
+                using (var outputWorkbook = new XLWorkbook("output.xlsx"))
+                {
+                    CopyInOtherFileRule rule = new CopyInOtherFileRule("InputColumn", "OutputColumn");
+                    CopyInOtherFileAction action = new CopyInOtherFileAction(rule, inputWorkbook.Worksheets, outputWorkbook.Worksheets);
+                    action.Execute();
 
+                    ValueChangementRule rule2 = new ValueChangementRule("InputColumn", "Tu pues","Gros PD");
+                    ValueChangingAction action2 = new ValueChangingAction(rule2, inputWorkbook.Worksheets);
+                    action2.Execute();
+
+                    outputWorkbook.Save();
+                    inputWorkbook.Save();
+                }
+            }*/
         }
         #endregion
     }

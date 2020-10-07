@@ -6,48 +6,50 @@ using System.Threading.Tasks;
 
 namespace D365_ExcelModifier.Models.Actions
 {
-    public class ValueChangingAction : IDocumentAction
+    public class ValueChangingAction 
     {
-        public IXLWorksheet Worksheet { get; set; }
+        public IXLWorksheets InputWorksheets { get; set; }
         public ValueChangementRule Rule { get; set; }
 
-        public ValueChangingAction(ValueChangementRule rule)
+        public ValueChangingAction(ValueChangementRule rule, IXLWorksheets inputWorksheets)
         {
             Rule = rule;
+            InputWorksheets = inputWorksheets;
         }
 
-        public async Task<bool> ExecuteAsync()
+        public bool Execute()
         {
-            if (Rule.TargetedColumn == "*")
+            if (Rule.InputColumn == "*")
             {
-                return await ChangeForAllColumnsAsync();
+                return ChangeForAllColumns();
             }
             else
             {
-                return await ChangeForSpecificColumnAsync();
+                return ChangeForSpecificColumn();
             }
         }
 
         /// <summary>
-        /// Change the value of targeted by value cells by a new value in all the columns of a worksheet.
+        /// Change the value of targeted by value cells by a new value in all the columns in all worksheets.
         /// </summary>
         /// <returns></returns>
-        private async Task<bool> ChangeForAllColumnsAsync()
+        private bool ChangeForAllColumns()
         {
-            await Task.Yield();
             try
             {
-                //We get all the cells from the sheet that starts with the old value
-                var cellsToReplace = Worksheet.Cells().Where(cell => cell.Value
-                .ToString()
-                .StartsWith(Rule.OldValue));
-
-                foreach (var cell in cellsToReplace)
+                foreach (var inputWorksheet in InputWorksheets)
                 {
-                    //we replace each cell with the new value
-                    cell.Value = Rule.NewValue;
-                }
+                    //We get all the cells from the sheet that starts with the old value
+                    var cellsToReplace = inputWorksheet.Cells().Where(cell => cell.Value
+                    .ToString()
+                    .StartsWith(Rule.OldValue));
 
+                    foreach (var cell in cellsToReplace)
+                    {
+                        //we replace each cell with the new value
+                        cell.Value = Rule.NewValue;
+                    }
+                }
                 return true;
             }
             catch (Exception e)
@@ -57,29 +59,30 @@ namespace D365_ExcelModifier.Models.Actions
         }
 
         /// <summary>
-        /// Get all the column specified in the rules and change their cells containing an old value with a new value;
+        /// Get all the column specified in the rules and change their cells containing an old value with a new value.
         /// </summary>
         /// <returns></returns>
-        private async Task<bool> ChangeForSpecificColumnAsync()
+        private bool ChangeForSpecificColumn()
         {
-            await Task.Yield();
             try
             {
-                //Get the columns where the first cell value is specified in the rule
-                var targetedColumns = Worksheet.Columns()
-                    .Where(column => column.Cell(1).Value.ToString().StartsWith(Rule.TargetedColumn));
-
-                foreach (var column in targetedColumns)
+                foreach (var inputWorksheet in InputWorksheets)
                 {
-                    //We find each cell that start with the old value
-                    var cellsToReplace = column.Cells().Where(cell => cell.Value.ToString().StartsWith(Rule.OldValue));
-                    foreach (var cell in cellsToReplace)
+                    //Get the columns where the first cell value is specified in the rule
+                    var targetedColumns = inputWorksheet.Columns()
+                    .Where(column => column.Cell(1).Value.ToString().StartsWith(Rule.InputColumn));
+
+                    foreach (var column in targetedColumns)
                     {
-                        //we replace the old valu by the new value
-                        cell.Value = Rule.NewValue;
+                        //We find each cell that start with the old value
+                        var cellsToReplace = column.Cells().Where(cell => cell.Value.ToString().StartsWith(Rule.OldValue));
+                        foreach (var cell in cellsToReplace)
+                        {
+                            //we replace the old valu by the new value
+                            cell.Value = Rule.NewValue;
+                        }
                     }
                 }
-
                 return true;
             }
             catch (Exception e)

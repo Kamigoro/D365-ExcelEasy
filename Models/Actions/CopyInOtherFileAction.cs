@@ -1,56 +1,66 @@
 ﻿using ClosedXML.Excel;
 using D365_ExcelModifier.Models.DocumentRules;
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace D365_ExcelModifier.Models.Actions
 {
-    public class CopyInOtherFileAction : IDocumentAction
+    public class CopyInOtherFileAction
     {
-        public IXLWorksheet Worksheet { get; set; }
+        public IXLWorksheets InputWorksheets { get; set; }
+        public IXLWorksheets OuputWorksheets { get; set; }
         public CopyInOtherFileRule Rule { get; set; }
 
-        public CopyInOtherFileAction(CopyInOtherFileRule rule)
+        public CopyInOtherFileAction(CopyInOtherFileRule rule, IXLWorksheets inputWorksheets, IXLWorksheets outputWorksheets)
         {
             Rule = rule;
+            InputWorksheets = inputWorksheets;
+            OuputWorksheets = outputWorksheets;
         }
 
-        public async Task<bool> ExecuteAsync()
+        public bool Execute()
         {
-            await Task.Yield();
             try
             {
-                using (var inputWorkbook = new XLWorkbook(Rule.InputFile))
+                //we assume we paste the data in the first worksheet of the output workbook
+                var outputworkseet = OuputWorksheets.ElementAt(0);
+                var outputColumn = outputworkseet.Columns().First(column => column.Cell(1).Value.ToString().StartsWith(Rule.OutputColumn));
+
+                //we want to get the last row used of the outputworksheet to append after it
+                int lastUsedRowIndex = outputworkseet.LastRowUsed().RowNumber();
+                int outputColumnIndex = outputColumn.ColumnNumber();
+
+                //We start writing in the output work sheet at the newt avaliable row in the specified column
+                int nextNewCellRowIndex = lastUsedRowIndex + 1;
+                foreach (var inputWorksheet in InputWorksheets)
                 {
-                    using (var outputWorkbook = new XLWorkbook(Rule.OutputFile))
+                    //Get the column where the header is the correct one
+                    var inputColumn = inputWorksheet.Columns()
+                        .FirstOrDefault(column => column.Cell(1)
+                        .Value
+                        .ToString()
+                        .StartsWith(Rule.InputColumn));
+
+                    //To avoid null exception
+                    if (inputColumn != null)
                     {
-                        //we assume we paste the data in the first worksheet of the output workbook
-                        var outputworkseet = outputWorkbook.Worksheet(1);
-                        var outputColumn = outputworkseet.Columns().First(column => column.Cell(1).Value.ToString().StartsWith(Rule.OutputColumn));
-
-                        //we want to get the last row used of the outputworksheet to append after it
-                        int lastUsedRowIndex = outputworkseet.LastRowUsed().RowNumber();
-                        int outputColumnIndex = outputColumn.ColumnNumber();
-
-                        //We start writing in the output work sheet at the newt avaliable row in the specified column
-                        int nextNewCellIndex = lastUsedRowIndex + 1;
-                        foreach (var inputWorksheet in inputWorkbook.Worksheets)
+                        //We get the cells of the selected column and we append them to the output file in the specified column of the first sheet
+                        var cellsOfInputColumn = inputColumn.Cells().ToList();
+                        cellsOfInputColumn.RemoveAt(0);//Removing header
+                        foreach (var inputcell in cellsOfInputColumn)
                         {
-                            var inputColumn = inputWorksheet.Columns().First(column => column.Cell(1).Value.ToString().StartsWith(Rule.InputColumn));
-                            foreach (var inputcell in inputColumn.Cells())
-                            {
-                                outputworkseet.Cell(nextNewCellIndex, outputColumnIndex).Value = inputcell.Value;
-                                nextNewCellIndex++;
-                            }
-
+                            outputworkseet.Cell(nextNewCellRowIndex, outputColumnIndex).Value = inputcell.Value;
+                            nextNewCellRowIndex++;
                         }
-
                     }
                 }
                 return true;
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return false;
             }
         }
