@@ -16,11 +16,11 @@ namespace D365_ExcelModifier.Models
             {
                 if (baseRule.OutputColumn == null)
                 {
-                    ValueChangementRules.Add((ValueChangementRule)baseRule);
+                    ValueChangementRules.Add(new ValueChangementRule(baseRule.InputColumn, baseRule.OldValue, baseRule.NewValue));
                 }
                 else
                 {
-                    CopyInOtherFileRules.Add((CopyInOtherFileRule)baseRule);
+                    CopyInOtherFileRules.Add(new CopyInOtherFileRule(baseRule.InputColumn, baseRule.OutputColumn));
                 }
             }
         }

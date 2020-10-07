@@ -62,7 +62,7 @@
                         IsEnabled="False"
                         Content="{materialDesign:PackIcon Kind=TableCog}"
                         Foreground="Red"
-                        ToolTip="Exécuter les règles"/>
+                        ToolTip="Exécuter les règles" Cursor="Hand"/>
             </StackPanel>
 
 

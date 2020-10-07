@@ -93,6 +93,8 @@ namespace D365_ExcelModifier
         #region Rules execution
         private void BTNExecuteRules_Click(object sender, RoutedEventArgs e)
         {
+            DocumentManager documentManager = new DocumentManager(DocumentRules);
+
             /*using (var inputWorkbook = new XLWorkbook("input.xlsx"))
             {
                 using (var outputWorkbook = new XLWorkbook("output.xlsx"))
