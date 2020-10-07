@@ -9,9 +9,9 @@ namespace D365_ExcelModifier.Models.Actions
     public class ValueChangingAction : IDocumentAction
     {
         public IXLWorksheet Worksheet { get; set; }
-        public SimpleValueChangementRule Rule { get; set; }
+        public ValueChangementRule Rule { get; set; }
 
-        public ValueChangingAction(SimpleValueChangementRule rule)
+        public ValueChangingAction(ValueChangementRule rule)
         {
             Rule = rule;
         }
