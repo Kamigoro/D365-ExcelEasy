@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D365-ExcelModifier", "..\D365-ExcelModifier\D365-ExcelModifier.csproj", "{31AEE7A4-731C-47A2-B97A-6D1BB871E582}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31AEE7A4-731C-47A2-B97A-6D1BB871E582}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31AEE7A4-731C-47A2-B97A-6D1BB871E582}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31AEE7A4-731C-47A2-B97A-6D1BB871E582}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31AEE7A4-731C-47A2-B97A-6D1BB871E582}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03ADE160-8E14-431E-894E-118DCDA389CA}
+	EndGlobalSection
+EndGlobal

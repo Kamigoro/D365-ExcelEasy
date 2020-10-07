@@ -1,0 +1,118 @@
+﻿<Window x:Class="D365_ExcelModifier.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:D365_ExcelModifier"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Excel Modifier" Height="720" Width="1200">
+    <Grid Background="#C3C3C3">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Input-->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Text="Entrées"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource MaterialDesignHeadline4TextBlock}"/>
+
+            <!--File picker-->
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <TextBox x:Name="TBXInputFile"
+                         TextChanged="TBXInputFile_TextChanged"
+                         Height="25" 
+                         MinWidth="250"/>
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        x:Name="BTNSearchInputFile"
+                        Click="BTNSearchInputFile_Click"
+                        Content="{materialDesign:PackIcon Kind=File}"
+                        Foreground="#389BE1"
+                        ToolTip="Choisir le fichier source"/>
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        x:Name="BTNExecuteRules"
+                        Click="BTNExecuteRules_Click"
+                        IsEnabled="False"
+                        Content="{materialDesign:PackIcon Kind=TableCog}"
+                        Foreground="Red"
+                        ToolTip="Choisir le fichier source" Cursor="Hand"/>
+            </StackPanel>
+            
+            <!--Ligne de remplacement-->
+            <ItemsControl Grid.Row="2" x:Name="ReplacementItems" ItemsSource="{Binding ReplacementRules}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#389BE1" BorderThickness="1" Margin="10,5" Height="30" MaxWidth="500">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBox Text="{Binding FromColumnOfInputfile}" materialDesign:HintAssist.Hint="Nom colonne" Margin="10,0,0,0"/>
+                                <TextBox Text="{Binding ValueToFind}" materialDesign:HintAssist.Hint="Valeur à trouver" Margin="10,0,0,0"/>
+                                <TextBox Text="{Binding ReplacementValue}" materialDesign:HintAssist.Hint="Valeur remplacement" Margin="10,0,0,0"/>
+                                <TextBox Text="{Binding ToColumnOfOutputFile}" materialDesign:HintAssist.Hint="Colonne destination" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!--Adding rule or removing last one-->
+            <StackPanel Grid.Row="3" MinWidth="50" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="BTNAddRule"
+                        Click="BTNAddRule_Click"
+                        Background="#389BE1"
+                        Content="{materialDesign:PackIcon Kind=Plus}"
+                        ToolTip="Ajouter une nouvelle règle"/>
+                <Button x:Name="BTNRemoveRule"
+                        Click="BTNRemoveRule_Click"
+                        Background="Red"
+                        Content="{materialDesign:PackIcon Kind=Minus}"
+                        ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
+            </StackPanel>
+            
+
+        </Grid>
+
+        <Grid Grid.Column="1" Background="Black"/>
+
+        <!--Output-->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Text="Sorties"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource MaterialDesignHeadline4TextBlock}"/>
+            
+            <!--File picker-->
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <TextBox x:Name="TBXOutputFile"
+                         Height="25" 
+                         MinWidth="250"/>
+                <Button x:Name="BTNSearchOutputFile"
+                        Click="BTNSearchOutputFile_Click"
+                        Style="{StaticResource MaterialDesignFlatButton}" 
+                        Content="{materialDesign:PackIcon Kind=File}"
+                        Foreground="#389BE1"/>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Window>
