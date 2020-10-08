@@ -1,9 +1,7 @@
 ﻿using ClosedXML.Excel;
 using D365_ExcelModifier.Models.Actions;
 using D365_ExcelModifier.Models.DocumentRules;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace D365_ExcelModifier.Models
 {
@@ -35,15 +33,16 @@ namespace D365_ExcelModifier.Models
             {
                 using (var outputWorkbook = new XLWorkbook(OutputFile))
                 {
-                    foreach (CopyInOtherFileRule copyInOtherFileRule in CopyInOtherFileRules)
-                    {
-                        CopyInOtherFileAction action = new CopyInOtherFileAction(rule, inputWorkbook.Worksheets, outputWorkbook.Worksheets);
-                        action.Execute();
-                    }
 
                     foreach (ValueChangementRule valueChangementRule in ValueChangementRules)
                     {
                         ValueChangingAction action = new ValueChangingAction(valueChangementRule, inputWorkbook.Worksheets);
+                        action.Execute();
+                    }
+
+                    foreach (CopyInOtherFileRule copyInOtherFileRule in CopyInOtherFileRules)
+                    {
+                        CopyInOtherFileAction action = new CopyInOtherFileAction(copyInOtherFileRule, inputWorkbook.Worksheets, outputWorkbook.Worksheets);
                         action.Execute();
                     }
 
