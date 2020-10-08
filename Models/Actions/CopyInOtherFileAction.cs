@@ -3,7 +3,6 @@ using D365_ExcelModifier.Models.DocumentRules;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace D365_ExcelModifier.Models.Actions
 {
@@ -29,11 +28,11 @@ namespace D365_ExcelModifier.Models.Actions
                 var outputColumn = outputworkseet.Columns().First(column => column.Cell(1).Value.ToString().StartsWith(Rule.OutputColumn));
 
                 //we want to get the last row used of the outputworksheet to append after it
-                int lastUsedRowIndex = outputworkseet.LastRowUsed().RowNumber();
+                int lastUsedRowInTheColumnIndex = outputColumn.LastCellUsed().WorksheetRow().RowNumber();
                 int outputColumnIndex = outputColumn.ColumnNumber();
 
                 //We start writing in the output work sheet at the newt avaliable row in the specified column
-                int nextNewCellRowIndex = lastUsedRowIndex + 1;
+                int nextNewCellRowIndex = lastUsedRowInTheColumnIndex + 1;
                 foreach (var inputWorksheet in InputWorksheets)
                 {
                     //Get the column where the header is the correct one
@@ -51,14 +50,19 @@ namespace D365_ExcelModifier.Models.Actions
                         cellsOfInputColumn.RemoveAt(0);//Removing header
                         foreach (var inputcell in cellsOfInputColumn)
                         {
-                            outputworkseet.Cell(nextNewCellRowIndex, outputColumnIndex).Value = inputcell.Value;
-                            nextNewCellRowIndex++;
+                            try
+                            {
+                                outputworkseet.Cell(nextNewCellRowIndex, outputColumnIndex).Value = inputcell.Value.ToString();
+                                nextNewCellRowIndex++;
+                            }
+                            catch (Exception e) { Debug.WriteLine(e); }
+
                         }
                     }
                 }
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
                 return false;

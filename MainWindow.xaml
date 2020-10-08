@@ -6,13 +6,14 @@
         xmlns:local="clr-namespace:D365_ExcelModifier"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="D365 Helper" Height="600" Width="600">
+        Title="D365 Helper" Height="480" Width="720" Cursor="Hand">
     <Grid Background="#C3C3C3">
 
         <!--Input-->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -20,6 +21,7 @@
 
             <TextBlock Grid.Row="0"
                        Text="D365 Helper"
+                       Margin="0,20"
                        HorizontalAlignment="Center"
                        Style="{StaticResource MaterialDesignHeadline4TextBlock}"/>
 
@@ -55,47 +57,123 @@
                             Content="{materialDesign:PackIcon Kind=File}"
                             Foreground="#389BE1"/>
                 </StackPanel>
-                <!--Execute rules Button-->
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                        x:Name="BTNExecuteRules"
-                        Click="BTNExecuteRules_Click"
-                        IsEnabled="False"
-                        Content="{materialDesign:PackIcon Kind=TableCog}"
-                        Foreground="Red"
-                        ToolTip="Exécuter les règles" Cursor="Hand"/>
+                
             </StackPanel>
 
 
-            <!--Ligne de remplacement-->
-            <ItemsControl Grid.Row="2" x:Name="ReplacementItems" ItemsSource="{Binding ReplacementRules}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="#389BE1" BorderThickness="1" Margin="10,5" Height="30" MaxWidth="500">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBox Text="{Binding InputColumn}" materialDesign:HintAssist.Hint="Nom colonne" Margin="10,0,0,0"/>
-                                <TextBox Text="{Binding OldValue}" materialDesign:HintAssist.Hint="Valeur à trouver" Margin="10,0,0,0"/>
-                                <TextBox Text="{Binding NewValue}" materialDesign:HintAssist.Hint="Valeur remplacement" Margin="10,0,0,0"/>
-                                <TextBox Text="{Binding OutputColumn}" materialDesign:HintAssist.Hint="Colonne destination" Margin="10,0,0,0"/>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid Grid.Row="2" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <!--Adding rule or removing last one-->
-            <StackPanel Grid.Row="3" MinWidth="50" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button x:Name="BTNAddRule"
-                        Click="BTNAddRule_Click"
-                        Background="#389BE1"
-                        Content="{materialDesign:PackIcon Kind=Plus}"
-                        ToolTip="Ajouter une nouvelle règle"/>
-                <Button x:Name="BTNRemoveRule"
-                        Click="BTNRemoveRule_Click"
-                        Background="Red"
-                        Content="{materialDesign:PackIcon Kind=Minus}"
-                        ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
-            </StackPanel>
+                <!--ValueChangementRules-->
+                <StackPanel Grid.Column="0" MinWidth="50" HorizontalAlignment="Center">
 
+                    <TextBlock Text="Règle de changement de valeur"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+
+                    <ScrollViewer MaxHeight="200">
+                        <ItemsControl x:Name="ValueChangementItems" ItemsSource="{Binding ReplacementRules}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#389BE1" BorderThickness="1" Margin="10,5" Height="30" MaxWidth="500">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBox Text="{Binding InputColumn}" materialDesign:HintAssist.Hint="Nom colonne" Margin="10,0,0,0"/>
+                                            <TextBox Text="{Binding OldValue}" materialDesign:HintAssist.Hint="Valeur à trouver" Margin="10,0,0,0"/>
+                                            <TextBox Text="{Binding NewValue}" materialDesign:HintAssist.Hint="Valeur remplacement" Margin="10,0,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!--Adding ValueChangement rule or removing last one-->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="BTNAddValueChangementRule"
+                            Click="BTNAddValueChangementRule_Click"
+                            Background="#389BE1"
+                            Content="{materialDesign:PackIcon Kind=Plus}"
+                            ToolTip="Ajouter une nouvelle règle"/>
+                        <Button x:Name="BTNRemoveValueChangementRule"
+                            Click="BTNRemoveValueChangementRule_Click"
+                            Background="Red"
+                            Content="{materialDesign:PackIcon Kind=Minus}"
+                            ToolTip="Supprimer la dernière règle"/>
+                        <!--Execute valuechangement rules Button-->
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                x:Name="BTNExecuteValueChangementRules"
+                                Click="BTNExecuteValueChangementRules_Click"
+                                IsEnabled="False"
+                                Content="{materialDesign:PackIcon Kind=TableCog}"
+                                Foreground="Red"
+                                ToolTip="Exécuter les règles"/>   
+                    </StackPanel>
+
+                </StackPanel>
+
+
+                <!--CopyInOtherFileRules-->
+                <StackPanel Grid.Column="2" MinWidth="50" HorizontalAlignment="Center">
+
+                    <TextBlock Text="Règle de copie de colonne"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+
+                    <ScrollViewer MaxHeight="200">
+                        <ItemsControl x:Name="CopyInOtherFileItems" ItemsSource="{Binding ReplacementRules}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#389BE1" BorderThickness="1" Margin="10,5" Height="30" MaxWidth="500">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBox Text="{Binding InputColumn}" materialDesign:HintAssist.Hint="Nom colonne" Margin="10,0,0,0"/>
+                                            <TextBox Text="{Binding OutputColumn}" materialDesign:HintAssist.Hint="Colonne destination" Margin="10,0,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!--Adding CopyInOtherFile rule or removing last one-->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="BTNAddCopyInOtherFileRule"
+                            Click="BTNAddCopyInOtherFileRule_Click"
+                            Background="#389BE1"
+                            Content="{materialDesign:PackIcon Kind=Plus}"
+                            ToolTip="Ajouter une nouvelle règle" Cursor="Hand"/>
+                        <Button x:Name="BTNCopyInOtherFileRemoveRule"
+                            Click="BTNRemoveCopyInOtherFileRule_Click"
+                            Background="Red"
+                            Content="{materialDesign:PackIcon Kind=Minus}"
+                            ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
+                        <!--Execute valuechangement rules Button-->
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                x:Name="BTNExecuteCopyInOtherFileRules"
+                                Click="BTNExecuteCopyInOtherFile_Click"
+                                IsEnabled="False"
+                                Content="{materialDesign:PackIcon Kind=TableCog}"
+                                Foreground="Red"
+                                ToolTip="Exécuter les règles"/>
+                    </StackPanel>
+
+                </StackPanel>
+
+
+            </Grid>
+            
+            
+
+
+            
+
+
+            <materialDesign:Snackbar x:Name="FinishedExecutionSnackbar"
+                                     Grid.Row="4"
+                                     MessageQueue="{materialDesign:MessageQueue}"/>
 
         </Grid>
 

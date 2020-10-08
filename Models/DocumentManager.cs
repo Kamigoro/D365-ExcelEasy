@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using D365_ExcelModifier.Models.Actions;
 using D365_ExcelModifier.Models.DocumentRules;
+using System;
 using System.Collections.Generic;
 
 namespace D365_ExcelModifier.Models
@@ -11,6 +12,7 @@ namespace D365_ExcelModifier.Models
         public string OutputFile { get; set; }
         private List<CopyInOtherFileRule> CopyInOtherFileRules { get; set; } = new List<CopyInOtherFileRule>();
         private List<ValueChangementRule> ValueChangementRules { get; set; } = new List<ValueChangementRule>();
+        public Action FinishedExecution_Event;
 
         public DocumentManager(List<DocumentRuleBase> baseRules, string inputFile, string outputFile)
         {
@@ -48,6 +50,8 @@ namespace D365_ExcelModifier.Models
 
             outputWorkbook.Save();
             inputWorkbook.Save();
+
+            FinishedExecution_Event?.Invoke();
         }
 
     }

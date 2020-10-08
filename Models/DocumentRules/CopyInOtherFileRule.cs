@@ -2,6 +2,11 @@
 {
     public class CopyInOtherFileRule : DocumentRuleBase
     {
+        public CopyInOtherFileRule()
+        {
+
+        }
+
         public CopyInOtherFileRule(string inputColumn, string outputColumn)
         {
             InputColumn = inputColumn;

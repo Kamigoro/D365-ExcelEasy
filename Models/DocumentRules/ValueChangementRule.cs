@@ -2,6 +2,12 @@
 {
     public class ValueChangementRule : DocumentRuleBase
     {
+
+        public ValueChangementRule()
+        {
+
+        }
+
         public ValueChangementRule(string inputColumn, string oldValue, string newValue)
         {
             InputColumn = inputColumn;
