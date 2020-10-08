@@ -51,8 +51,10 @@ namespace D365_ExcelModifier
 
         private void BTNSearchInputFile_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Fichier xlsx (.xlsx)|*.xlsx";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Fichier xlsx (.xlsx)|*.xlsx"
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 TBXInputFile.Text = openFileDialog.FileName;
@@ -61,8 +63,10 @@ namespace D365_ExcelModifier
 
         private void BTNSearchOutputFile_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Fichier xlsx (.xlsx)|*.xlsx";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Fichier xlsx (.xlsx)|*.xlsx"
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 TBXOutputFile.Text = openFileDialog.FileName;

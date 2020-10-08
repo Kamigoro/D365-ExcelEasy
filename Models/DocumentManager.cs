@@ -14,6 +14,9 @@ namespace D365_ExcelModifier.Models
 
         public DocumentManager(List<DocumentRuleBase> baseRules, string inputFile, string outputFile)
         {
+            InputFile = inputFile;
+            OutputFile = outputFile;
+
             foreach (DocumentRuleBase baseRule in baseRules)
             {
                 if (baseRule.OutputColumn == null)
@@ -29,27 +32,22 @@ namespace D365_ExcelModifier.Models
 
         public void ExecuteRules()
         {
-            using (var inputWorkbook = new XLWorkbook(InputFile))
+            using var inputWorkbook = new XLWorkbook(InputFile);
+            using var outputWorkbook = new XLWorkbook(OutputFile);
+            foreach (ValueChangementRule valueChangementRule in ValueChangementRules)
             {
-                using (var outputWorkbook = new XLWorkbook(OutputFile))
-                {
-
-                    foreach (ValueChangementRule valueChangementRule in ValueChangementRules)
-                    {
-                        ValueChangingAction action = new ValueChangingAction(valueChangementRule, inputWorkbook.Worksheets);
-                        action.Execute();
-                    }
-
-                    foreach (CopyInOtherFileRule copyInOtherFileRule in CopyInOtherFileRules)
-                    {
-                        CopyInOtherFileAction action = new CopyInOtherFileAction(copyInOtherFileRule, inputWorkbook.Worksheets, outputWorkbook.Worksheets);
-                        action.Execute();
-                    }
-
-                    outputWorkbook.Save();
-                    inputWorkbook.Save();
-                }
+                ValueChangingAction action = new ValueChangingAction(valueChangementRule, inputWorkbook.Worksheets);
+                action.Execute();
             }
+
+            foreach (CopyInOtherFileRule copyInOtherFileRule in CopyInOtherFileRules)
+            {
+                CopyInOtherFileAction action = new CopyInOtherFileAction(copyInOtherFileRule, inputWorkbook.Worksheets, outputWorkbook.Worksheets);
+                action.Execute();
+            }
+
+            outputWorkbook.Save();
+            inputWorkbook.Save();
         }
 
     }
