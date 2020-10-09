@@ -13,34 +13,57 @@ namespace D365_ExcelModifier.Models
         private List<CopyInOtherFileRule> CopyInOtherFileRules { get; set; } = new List<CopyInOtherFileRule>();
         private List<ValueChangementRule> ValueChangementRules { get; set; } = new List<ValueChangementRule>();
         public Action FinishedExecution_Event;
+        private RuleTypeEnum ruleType;
 
-        public DocumentManager(List<DocumentRuleBase> baseRules, string inputFile, string outputFile)
+        public DocumentManager(List<CopyInOtherFileRule> copyInOtherFileRules, string inputFile, string outputFile)
         {
+            CopyInOtherFileRules = copyInOtherFileRules;
             InputFile = inputFile;
             OutputFile = outputFile;
+            ruleType = RuleTypeEnum.CopyInOtherFile;
+        }
 
-            foreach (DocumentRuleBase baseRule in baseRules)
-            {
-                if (baseRule.OutputColumn == null)
-                {
-                    ValueChangementRules.Add(new ValueChangementRule(baseRule.InputColumn, baseRule.OldValue, baseRule.NewValue));
-                }
-                else
-                {
-                    CopyInOtherFileRules.Add(new CopyInOtherFileRule(baseRule.InputColumn, baseRule.OutputColumn));
-                }
-            }
+        public DocumentManager(List<ValueChangementRule> valueChangementRules, string inputFile)
+        {
+            ValueChangementRules = valueChangementRules;
+            InputFile = inputFile;
+            ruleType = RuleTypeEnum.ValueChangement;
         }
 
         public void ExecuteRules()
         {
+            switch (ruleType)
+            {
+                case RuleTypeEnum.CopyInOtherFile:
+                    ExecuteCopyInOtherFilesRules();
+                    break;
+                case RuleTypeEnum.ValueChangement:
+                    ExecuteValueChangementRules();
+                    break;
+                default:
+                    return;
+            }
+
+            FinishedExecution_Event?.Invoke();
+        }
+
+
+        private void ExecuteValueChangementRules()
+        {
             using var inputWorkbook = new XLWorkbook(InputFile);
-            using var outputWorkbook = new XLWorkbook(OutputFile);
             foreach (ValueChangementRule valueChangementRule in ValueChangementRules)
             {
                 ValueChangingAction action = new ValueChangingAction(valueChangementRule, inputWorkbook.Worksheets);
                 action.Execute();
             }
+            inputWorkbook.Save();
+        }
+
+        private void ExecuteCopyInOtherFilesRules()
+        {
+            using var inputWorkbook = new XLWorkbook(InputFile);
+            using var outputWorkbook = new XLWorkbook(OutputFile);
+
 
             foreach (CopyInOtherFileRule copyInOtherFileRule in CopyInOtherFileRules)
             {
@@ -50,8 +73,6 @@ namespace D365_ExcelModifier.Models
 
             outputWorkbook.Save();
             inputWorkbook.Save();
-
-            FinishedExecution_Event?.Invoke();
         }
 
     }

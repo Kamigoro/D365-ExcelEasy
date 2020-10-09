@@ -48,6 +48,7 @@
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                     <TextBox x:Name="TBXOutputFile"
+                             TextChanged="TBXOutputFile_TextChanged"
                              Height="25" 
                              MinWidth="250"
                              materialDesign:HintAssist.Hint="Fichier excel de sortie"/>
@@ -102,7 +103,7 @@
                             Click="BTNRemoveValueChangementRule_Click"
                             Background="Red"
                             Content="{materialDesign:PackIcon Kind=Minus}"
-                            ToolTip="Supprimer la dernière règle"/>
+                            ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
                         <!--Execute valuechangement rules Button-->
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
                                 x:Name="BTNExecuteValueChangementRules"
@@ -110,8 +111,12 @@
                                 IsEnabled="False"
                                 Content="{materialDesign:PackIcon Kind=TableCog}"
                                 Foreground="Red"
-                                ToolTip="Exécuter les règles"/>   
+                                ToolTip="Exécuter les règles" Cursor="Hand"/>   
                     </StackPanel>
+
+
+                    <materialDesign:Snackbar x:Name="ValueChangementSnackbar"
+                                             MessageQueue="{materialDesign:MessageQueue}"/>
 
                 </StackPanel>
 
@@ -160,6 +165,9 @@
                                 ToolTip="Exécuter les règles"/>
                     </StackPanel>
 
+                    <materialDesign:Snackbar x:Name="CopySnackbar"
+                                             MessageQueue="{materialDesign:MessageQueue}"/>
+                    
                 </StackPanel>
 
 
@@ -171,9 +179,7 @@
             
 
 
-            <materialDesign:Snackbar x:Name="FinishedExecutionSnackbar"
-                                     Grid.Row="4"
-                                     MessageQueue="{materialDesign:MessageQueue}"/>
+            
 
         </Grid>
 

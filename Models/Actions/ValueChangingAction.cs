@@ -1,12 +1,12 @@
 ﻿using ClosedXML.Excel;
 using D365_ExcelModifier.Models.DocumentRules;
 using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace D365_ExcelModifier.Models.Actions
 {
-    public class ValueChangingAction 
+    public class ValueChangingAction
     {
         public IXLWorksheets InputWorksheets { get; set; }
         public ValueChangementRule Rule { get; set; }
@@ -35,6 +35,8 @@ namespace D365_ExcelModifier.Models.Actions
         /// <returns></returns>
         private bool ChangeForAllColumns()
         {
+            Debug.WriteLine($"OldValue : {Rule.OldValue}");
+            Debug.WriteLine($"NewValue : {Rule.NewValue}");
             try
             {
                 foreach (var inputWorksheet in InputWorksheets)
@@ -54,6 +56,7 @@ namespace D365_ExcelModifier.Models.Actions
             }
             catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return false;
             }
         }
