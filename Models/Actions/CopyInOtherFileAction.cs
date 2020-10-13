@@ -65,7 +65,7 @@ namespace D365_ExcelModifier.Models.Actions
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                return false;
+                throw;
             }
         }
     }

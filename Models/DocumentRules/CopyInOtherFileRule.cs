@@ -4,16 +4,5 @@
     {
         public string InputColumn { get; set; }
         public string OutputColumn { get; set; }
-
-        public CopyInOtherFileRule()
-        {
-
-        }
-
-        public CopyInOtherFileRule(string inputColumn, string outputColumn)
-        {
-            InputColumn = inputColumn;
-            OutputColumn = outputColumn;
-        }
     }
 }

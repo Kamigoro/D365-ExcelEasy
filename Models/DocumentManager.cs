@@ -13,31 +13,31 @@ namespace D365_ExcelModifier.Models
         private List<CopyInOtherFileRule> CopyInOtherFileRules { get; set; } = new List<CopyInOtherFileRule>();
         private List<ValueChangementRule> ValueChangementRules { get; set; } = new List<ValueChangementRule>();
         public Action FinishedExecution_Event;
-        private RuleTypeEnum ruleType;
+        private RuleType ruleType;
 
         public DocumentManager(List<CopyInOtherFileRule> copyInOtherFileRules, string inputFile, string outputFile)
         {
             CopyInOtherFileRules = copyInOtherFileRules;
             InputFile = inputFile;
             OutputFile = outputFile;
-            ruleType = RuleTypeEnum.CopyInOtherFile;
+            ruleType = RuleType.CopyInOtherFile;
         }
 
         public DocumentManager(List<ValueChangementRule> valueChangementRules, string inputFile)
         {
             ValueChangementRules = valueChangementRules;
             InputFile = inputFile;
-            ruleType = RuleTypeEnum.ValueChangement;
+            ruleType = RuleType.ValueChangement;
         }
 
         public void ExecuteRules()
         {
             switch (ruleType)
             {
-                case RuleTypeEnum.CopyInOtherFile:
+                case RuleType.CopyInOtherFile:
                     ExecuteCopyInOtherFilesRules();
                     break;
-                case RuleTypeEnum.ValueChangement:
+                case RuleType.ValueChangement:
                     ExecuteValueChangementRules();
                     break;
                 default:

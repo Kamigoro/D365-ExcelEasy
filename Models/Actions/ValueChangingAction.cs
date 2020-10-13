@@ -57,7 +57,7 @@ namespace D365_ExcelModifier.Models.Actions
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                return false;
+                throw;
             }
         }
 
@@ -90,7 +90,7 @@ namespace D365_ExcelModifier.Models.Actions
             }
             catch (Exception e)
             {
-                return false;
+                throw;
             }
         }
 
