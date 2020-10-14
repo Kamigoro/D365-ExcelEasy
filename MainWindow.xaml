@@ -96,12 +96,12 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button x:Name="BTNAddValueChangementRule"
                             Click="BTNAddValueChangementRule_Click"
-                            Background="#389BE1"
+                            Background="#C3C3C3"
                             Content="{materialDesign:PackIcon Kind=Plus}"
                             ToolTip="Ajouter une nouvelle règle"/>
                         <Button x:Name="BTNRemoveValueChangementRule"
                             Click="BTNRemoveValueChangementRule_Click"
-                            Background="Red"
+                            Background="#C3C3C3"
                             Content="{materialDesign:PackIcon Kind=Minus}"
                             ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
                         <!--Execute valuechangement rules Button-->
@@ -111,7 +111,7 @@
                                 IsEnabled="False"
                                 Content="{materialDesign:PackIcon Kind=TableCog}"
                                 Foreground="Red"
-                                ToolTip="Exécuter les règles" Cursor="Hand"/>   
+                                ToolTip="Exécuter les règles" Cursor="Hand"/>
                     </StackPanel>
 
 
@@ -147,12 +147,12 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button x:Name="BTNAddCopyInOtherFileRule"
                             Click="BTNAddCopyInOtherFileRule_Click"
-                            Background="#389BE1"
+                            Background="#C3C3C3"
                             Content="{materialDesign:PackIcon Kind=Plus}"
                             ToolTip="Ajouter une nouvelle règle" Cursor="Hand"/>
                         <Button x:Name="BTNCopyInOtherFileRemoveRule"
                             Click="BTNRemoveCopyInOtherFileRule_Click"
-                            Background="Red"
+                            Background="#C3C3C3"
                             Content="{materialDesign:PackIcon Kind=Minus}"
                             ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
                         <!--Execute valuechangement rules Button-->
@@ -167,19 +167,10 @@
 
                     <materialDesign:Snackbar x:Name="CopySnackbar"
                                              MessageQueue="{materialDesign:MessageQueue}"/>
-                    
+
                 </StackPanel>
-
-
+                
             </Grid>
-            
-            
-
-
-            
-
-
-            
 
         </Grid>
 
