@@ -1,5 +1,6 @@
 ﻿using D365_ExcelModifier.Models;
 using D365_ExcelModifier.Models.DocumentRules;
+using D365_ExcelModifier.ViewModels;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using System;
@@ -17,14 +18,13 @@ namespace D365_ExcelModifier
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<ValueChangementRule> ValueChangementRules = new List<ValueChangementRule>();
-        private List<CopyInOtherFileRule> CopyInOtherFileRules = new List<CopyInOtherFileRule>();
+        public MainViewModel ViewModel { get; set; }
 
         public MainWindow()
         {
+            ViewModel = new MainViewModel();
+            DataContext = ViewModel;
             InitializeComponent();
-            ValueChangementItems.ItemsSource = ValueChangementRules;
-            CopyInOtherFileItems.ItemsSource = CopyInOtherFileRules;
         }
 
         #region Rules gui management
@@ -32,24 +32,20 @@ namespace D365_ExcelModifier
         #region ValueChangement Rules
         private void BTNAddValueChangementRule_Click(object sender, RoutedEventArgs e)
         {
-            ValueChangementRules.Add(new ValueChangementRule());
+            ViewModel.AddChangementRule();
             RefreshValueChangementRulesItem();
         }
         private void BTNRemoveValueChangementRule_Click(object sender, RoutedEventArgs e)
         {
-            if (ValueChangementRules.Count > 0)
-            {
-                ValueChangementRules.RemoveAt(ValueChangementRules.Count - 1);
-                RefreshValueChangementRulesItem();
-            }
+            ViewModel.RemoveChangementRule();
+            RefreshValueChangementRulesItem();
         }
-
         private void RefreshValueChangementRulesItem()
         {
             Dispatcher.BeginInvoke((Action)(() =>
             {
-                ValueChangementItems.ItemsSource = null;
-                ValueChangementItems.ItemsSource = ValueChangementRules;
+                ChangementItems.ItemsSource = null;
+                ChangementItems.ItemsSource = ViewModel.ChangementRules;
             }));
         }
         #endregion
@@ -57,24 +53,20 @@ namespace D365_ExcelModifier
         #region CopyInOtherFile Rules
         private void BTNAddCopyInOtherFileRule_Click(object sender, RoutedEventArgs e)
         {
-            CopyInOtherFileRules.Add(new CopyInOtherFileRule());
+            ViewModel.AddCopyRule();
             RefreshCopyInOtherFileRulesItem();
         }
         private void BTNRemoveCopyInOtherFileRule_Click(object sender, RoutedEventArgs e)
         {
-            if (ValueChangementRules.Count > 0)
-            {
-                CopyInOtherFileRules.RemoveAt(ValueChangementRules.Count - 1);
-                RefreshCopyInOtherFileRulesItem();
-            }
+            ViewModel.RemoveCopyRule();
+            RefreshCopyInOtherFileRulesItem();
         }
-
         private void RefreshCopyInOtherFileRulesItem()
         {
             Dispatcher.BeginInvoke((Action)(() =>
             {
-                CopyInOtherFileItems.ItemsSource = null;
-                CopyInOtherFileItems.ItemsSource = CopyInOtherFileRules;
+                CopyItems.ItemsSource = null;
+                CopyItems.ItemsSource = ViewModel.CopyRules;
             }));
         }
         #endregion
@@ -113,13 +105,14 @@ namespace D365_ExcelModifier
         {
             if (File.Exists(TBXInputFile.Text))
             {
-                BTNExecuteValueChangementRules.Foreground = new SolidColorBrush(Colors.Green);
-                BTNExecuteValueChangementRules.IsEnabled = true;
+                BTNExecuteChangementRules.Foreground = new SolidColorBrush(Colors.Green);
+                BTNExecuteChangementRules.IsEnabled = true;
+                ViewModel.InputFile = TBXInputFile.Text;
             }
             else
             {
-                BTNExecuteValueChangementRules.Foreground = new SolidColorBrush(Colors.Red);
-                BTNExecuteValueChangementRules.IsEnabled = true;
+                BTNExecuteChangementRules.Foreground = new SolidColorBrush(Colors.Red);
+                BTNExecuteChangementRules.IsEnabled = true;
             }
         }
 
@@ -127,13 +120,14 @@ namespace D365_ExcelModifier
         {
             if (File.Exists(TBXOutputFile.Text) && File.Exists(TBXInputFile.Text))
             {
-                BTNExecuteCopyInOtherFileRules.Foreground = new SolidColorBrush(Colors.Green);
-                BTNExecuteCopyInOtherFileRules.IsEnabled = true;
+                BTNExecuteCopyRules.Foreground = new SolidColorBrush(Colors.Green);
+                BTNExecuteCopyRules.IsEnabled = true;
+                ViewModel.OutputFile = TBXOutputFile.Text;
             }
             else
             {
-                BTNExecuteCopyInOtherFileRules.Foreground = new SolidColorBrush(Colors.Red);
-                BTNExecuteCopyInOtherFileRules.IsEnabled = true;
+                BTNExecuteCopyRules.Foreground = new SolidColorBrush(Colors.Red);
+                BTNExecuteCopyRules.IsEnabled = true;
             }
         }
 
@@ -143,57 +137,19 @@ namespace D365_ExcelModifier
 
         #region ValueChangement rules
 
-        private void BTNExecuteValueChangementRules_Click(object sender, RoutedEventArgs e)
+        private void BTNExecuteChangementRules_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                DocumentManager documentManager = new DocumentManager(ValueChangementRules, TBXInputFile.Text);
-                documentManager.FinishedExecution_Event += FinishedChangementValue_EventHandler;
-                Task.Run(() =>
-                {
-                    documentManager.ExecuteRules();
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-
-        }
-
-        private void FinishedChangementValue_EventHandler()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                var messageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(2000));
-                ValueChangementSnackbar.MessageQueue = messageQueue;
-                ValueChangementSnackbar.MessageQueue.Enqueue("Opération terminée");
-            });
+            ViewModel.ExecuteChangementRules();
         }
 
         #endregion
 
         #region CopyInOtherFile rules
 
-        private void BTNExecuteCopyInOtherFile_Click(object sender, RoutedEventArgs e)
+        private void BTNExecuteCopyRules_Click(object sender, RoutedEventArgs e)
         {
 
-            DocumentManager documentManager = new DocumentManager(CopyInOtherFileRules, TBXInputFile.Text, TBXOutputFile.Text);
-            documentManager.FinishedExecution_Event += FinishedCopyInOtherFile_EventHandler;
-            Task.Run(() =>
-            {
-                documentManager.ExecuteRules();
-            });
-        }
-
-        private void FinishedCopyInOtherFile_EventHandler()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                var messageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(2000));
-                CopySnackbar.MessageQueue = messageQueue;
-                CopySnackbar.MessageQueue.Enqueue("Opération terminée");
-            });
+            ViewModel.ExecuteCopyRules();
         }
 
         #endregion

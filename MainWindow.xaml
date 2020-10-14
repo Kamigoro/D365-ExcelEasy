@@ -32,6 +32,7 @@
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                     <TextBox x:Name="TBXInputFile"
+                             Text="{Binding InputFile}"
                              TextChanged="TBXInputFile_TextChanged"
                              Height="25" 
                              MinWidth="250"
@@ -48,6 +49,7 @@
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                     <TextBox x:Name="TBXOutputFile"
+                             Text="{Binding OutputFile}"
                              TextChanged="TBXOutputFile_TextChanged"
                              Height="25" 
                              MinWidth="250"
@@ -73,16 +75,15 @@
                 <StackPanel Grid.Column="0" MinWidth="50" HorizontalAlignment="Center">
 
                     <TextBlock Text="Règle de changement de valeur"
-                           HorizontalAlignment="Center"
-                           Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                               HorizontalAlignment="Center"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
 
                     <ScrollViewer MaxHeight="200">
-                        <ItemsControl x:Name="ValueChangementItems" ItemsSource="{Binding ReplacementRules}">
+                        <ItemsControl x:Name="ChangementItems" ItemsSource="{Binding ReplacementRules}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="#389BE1" BorderThickness="1" Margin="10,5" Height="30" MaxWidth="500">
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBox Text="{Binding InputColumn}" materialDesign:HintAssist.Hint="Nom colonne" Margin="10,0,0,0"/>
                                             <TextBox Text="{Binding OldValue}" materialDesign:HintAssist.Hint="Valeur à trouver" Margin="10,0,0,0"/>
                                             <TextBox Text="{Binding NewValue}" materialDesign:HintAssist.Hint="Valeur remplacement" Margin="10,0,0,0"/>
                                         </StackPanel>
@@ -106,8 +107,8 @@
                             ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
                         <!--Execute valuechangement rules Button-->
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                x:Name="BTNExecuteValueChangementRules"
-                                Click="BTNExecuteValueChangementRules_Click"
+                                x:Name="BTNExecuteChangementRules"
+                                Click="BTNExecuteChangementRules_Click"
                                 IsEnabled="False"
                                 Content="{materialDesign:PackIcon Kind=TableCog}"
                                 Foreground="Red"
@@ -125,11 +126,11 @@
                 <StackPanel Grid.Column="2" MinWidth="50" HorizontalAlignment="Center">
 
                     <TextBlock Text="Règle de copie de colonne"
-                           HorizontalAlignment="Center"
-                           Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                               HorizontalAlignment="Center"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
 
                     <ScrollViewer MaxHeight="200">
-                        <ItemsControl x:Name="CopyInOtherFileItems" ItemsSource="{Binding ReplacementRules}">
+                        <ItemsControl x:Name="CopyItems" ItemsSource="{Binding CopyRules}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="#389BE1" BorderThickness="1" Margin="10,5" Height="30" MaxWidth="500">
@@ -157,8 +158,8 @@
                             ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
                         <!--Execute valuechangement rules Button-->
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                x:Name="BTNExecuteCopyInOtherFileRules"
-                                Click="BTNExecuteCopyInOtherFile_Click"
+                                x:Name="BTNExecuteCopyRules"
+                                Click="BTNExecuteCopyRules_Click"
                                 IsEnabled="False"
                                 Content="{materialDesign:PackIcon Kind=TableCog}"
                                 Foreground="Red"
