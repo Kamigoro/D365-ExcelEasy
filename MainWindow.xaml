@@ -15,20 +15,22 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!--Files picker-->
-            <StackPanel Grid.Row="0">
+            <Grid Grid.Row="0">
                 
                 <!--Input file-->
                 <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center">
+                            HorizontalAlignment="Center"
+                            Margin="0,20">
                     <TextBox x:Name="TBXInputFile"
                              Text="{Binding InputFile}"
                              TextChanged="TBXInputFile_TextChanged"
                              Height="25" 
                              MinWidth="250"
-                             materialDesign:HintAssist.Hint="Fichier excel d'entrée"/>
+                             materialDesign:HintAssist.Hint="Fichier Excel d'entrée"/>
                     <Button Style="{StaticResource MaterialDesignFlatButton}"
                             x:Name="BTNSearchInputFile"
                             Click="BTNSearchInputFile_Click"
@@ -37,19 +39,36 @@
                             ToolTip="Choisir le fichier source"/>
                 </StackPanel>
                 
-            </StackPanel>
+            </Grid>
 
 
-            <Grid Grid.Row="1" HorizontalAlignment="Center">
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--Value Changement Rules Grid-->
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="250"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                    </Grid.RowDefinitions>
 
-                <!--ValueChangementRules-->
-                <StackPanel MinWidth="50" HorizontalAlignment="Center">
-
-                    <TextBlock Text="Règle de changement de valeur"
-                               HorizontalAlignment="Center"
+                    <TextBlock Text="Changement de valeur"
+                               Grid.Column="0"
+                               Grid.Row="0"
+                               HorizontalAlignment="Left"
                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
 
-                    <ScrollViewer MaxHeight="200">
+                    <!--Rules items controls-->
+                    <ScrollViewer MaxHeight="200" Grid.Row="1" Grid.Column="0">
                         <ItemsControl x:Name="ChangementItems" ItemsSource="{Binding ReplacementRules}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -64,18 +83,18 @@
                         </ItemsControl>
                     </ScrollViewer>
 
-                    <!--Adding ValueChangement rule or removing last one-->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <!--Add/Remove/Execute rules-->
+                    <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center">
                         <Button x:Name="BTNAddValueChangementRule"
-                            Click="BTNAddValueChangementRule_Click"
-                            Background="#C3C3C3"
-                            Content="{materialDesign:PackIcon Kind=Plus}"
-                            ToolTip="Ajouter une nouvelle règle"/>
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="BTNAddValueChangementRule_Click"
+                                Content="{materialDesign:PackIcon Kind=Plus}"
+                                ToolTip="Ajouter une nouvelle règle"/>
                         <Button x:Name="BTNRemoveValueChangementRule"
-                            Click="BTNRemoveValueChangementRule_Click"
-                            Background="#C3C3C3"
-                            Content="{materialDesign:PackIcon Kind=Minus}"
-                            ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="BTNRemoveValueChangementRule_Click"
+                                Content="{materialDesign:PackIcon Kind=Minus}"
+                                ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
                         <!--Execute valuechangement rules Button-->
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
                                 x:Name="BTNExecuteChangementRules"
@@ -86,14 +105,12 @@
                                 ToolTip="Exécuter les règles" Cursor="Hand"/>
                     </StackPanel>
 
-
-                    <materialDesign:Snackbar x:Name="ValueChangementSnackbar"
-                                             MessageQueue="{materialDesign:MessageQueue}"/>
-
-                </StackPanel>
+                    <ProgressBar x:Name="ChangementRulesProgressBar" Grid.Row="2" Maximum="100" Background="Red" Foreground="Green" Value="0"/>
+                </Grid>
             </Grid>
-
-            <TextBox Grid.Row="2"
+            
+            
+            <TextBox Grid.Row="3"
                      x:Name="TBKErrorMessage"
                      Margin="10,30"
                      Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"

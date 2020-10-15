@@ -20,6 +20,7 @@ namespace D365_ExcelModifier
     public partial class MainWindow : Window
     {
         public MainViewModel ViewModel { get; set; }
+        private double ChangementRulesProgressBarIncrement { get; set; }
 
         public MainWindow()
         {
@@ -58,12 +59,20 @@ namespace D365_ExcelModifier
 
         private void ChangementRule_Executed(object sender, RuleEventArgs e)
         {
-            if (e.ExecutionStatus == false)
+            Dispatcher.Invoke(() =>
             {
-                ChangementRule rule = (ChangementRule)e.Rule;
-                string errorMessage = $"Règle de Changement de valeur\n Valeur à remplacer : {rule.OldValue}\t Valeur de remplacement : {rule.NewValue}\n Mesage d'erreur : {e.ErrorMessage}\n\n";
-                TBKErrorMessage.Text += errorMessage;
-            }
+                if (e.ExecutionStatus == false)
+                {
+                    ChangementRule rule = (ChangementRule)e.Rule;
+                    string errorMessage = $"Règle de Changement de valeur\n Valeur à remplacer : {rule.OldValue}\t Valeur de remplacement : {rule.NewValue}\n Mesage d'erreur : {e.ErrorMessage}\n\n";
+                    TBKErrorMessage.Text += errorMessage;
+                }
+                else
+                {
+                    ChangementRulesProgressBar.Value += ChangementRulesProgressBarIncrement;
+                }
+            });
+
         }
 
         #endregion
@@ -108,7 +117,10 @@ namespace D365_ExcelModifier
 
         private void BTNExecuteChangementRules_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.ExecuteChangementRules();
+            ChangementRulesProgressBarIncrement = 100 / ViewModel.ChangementRules.Count;
+            ChangementRulesProgressBar.Value = 0;
+            Thread executionThread = new Thread(ViewModel.ExecuteChangementRules);
+            executionThread.Start();
         }
 
         #endregion
