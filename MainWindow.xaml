@@ -6,13 +6,12 @@
         xmlns:local="clr-namespace:D365_ExcelModifier"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="D365 Helper" Height="480" Width="720" Cursor="Hand">
+        Title="D365 Helper" Height="600" Width="720" Cursor="Hand">
     <Grid Background="#C3C3C3">
 
         <!--Input-->
-        <Grid Grid.Column="0">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -172,6 +171,19 @@
                 </StackPanel>
                 
             </Grid>
+
+            <TextBox Grid.Row="3"
+                     x:Name="TBKErrorMessage"
+                     Margin="10,30"
+                     Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                     VerticalAlignment="Top"
+                     Height="100"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto">
+            </TextBox>
+
+
 
         </Grid>
 

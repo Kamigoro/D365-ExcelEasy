@@ -23,9 +23,13 @@ namespace D365_ExcelModifier
         public MainWindow()
         {
             ViewModel = new MainViewModel();
+            ViewModel.ChangementRule_EventHandler += ChangementRule_Executed;
+            ViewModel.CopyRule_EventHandler += CopyRule_Executed;
             DataContext = ViewModel;
             InitializeComponent();
         }
+
+
 
         #region Rules gui management
 
@@ -71,6 +75,29 @@ namespace D365_ExcelModifier
         }
         #endregion
 
+        #region Rule execution event
+
+        private void CopyRule_Executed(object sender, RuleEventArgs e)
+        {
+            if (e.ExecutionStatus == false)
+            {
+                CopyRule rule = (CopyRule)e.Rule;
+                string errorMessage = $"Règle de copie\n Colonne d'entrée : {rule.InputColumn}\t Colonne de sortie : {rule.OutputColumn}\n Mesage d'erreur : {e.ErrorMessage}\n\n";
+                TBKErrorMessage.Text += errorMessage;
+            }
+        }
+
+        private void ChangementRule_Executed(object sender, RuleEventArgs e)
+        {
+            if (e.ExecutionStatus == false)
+            {
+                ChangementRule rule = (ChangementRule)e.Rule;
+                string errorMessage = $"Règle de Changement de valeur\n Valeur à remplacer : {rule.OldValue}\t Valeur de remplacement : {rule.NewValue}\n Mesage d'erreur : {e.ErrorMessage}\n\n";
+                TBKErrorMessage.Text += errorMessage;
+            }
+        }
+
+        #endregion
 
         #endregion
 

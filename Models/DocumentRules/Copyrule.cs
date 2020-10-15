@@ -7,7 +7,7 @@ using System.Text;
 
 namespace D365_ExcelModifier.Models.DocumentRules
 {
-    public class Copyrule : BaseRule
+    public class CopyRule : BaseRule
     {
         public string InputFile { get; set; }
         public string OutputFile { get; set; }

@@ -10,22 +10,38 @@ namespace D365_ExcelModifier.ViewModels
     {
         public string InputFile { get; set; }
         public string OutputFile { get; set; }
-        public List<Copyrule> CopyRules { get; set; } = new List<Copyrule>();
+        public List<CopyRule> CopyRules { get; set; } = new List<CopyRule>();
+        public EventHandler<RuleEventArgs> CopyRule_EventHandler;
         public List<ChangementRule> ChangementRules { get; set; } = new List<ChangementRule>();
+        public EventHandler<RuleEventArgs> ChangementRule_EventHandler;
 
         #region Rules management
 
-        public void AddCopyRule() 
+        public void AddCopyRule()
         {
-            CopyRules.Add(new Copyrule());
-        }
-        
-        public void AddChangementRule() 
-        {
-            ChangementRules.Add(new ChangementRule());
+            CopyRule rule = new CopyRule();
+            rule.RuleExecuted_EventHandler += CopyRule_Executed;
+            CopyRules.Add(rule);
         }
 
-        public void RemoveCopyRule() 
+        private void CopyRule_Executed(object sender, RuleEventArgs e)
+        {
+            CopyRule_EventHandler?.Invoke(this, e);
+        }
+
+        public void AddChangementRule()
+        {
+            ChangementRule rule = new ChangementRule();
+            rule.RuleExecuted_EventHandler += ChangementRule_Executed;
+            ChangementRules.Add(rule);
+        }
+
+        private void ChangementRule_Executed(object sender, RuleEventArgs e)
+        {
+            ChangementRule_EventHandler?.Invoke(this, e);
+        }
+
+        public void RemoveCopyRule()
         {
             if (CopyRules.Count > 0)
             {
@@ -33,7 +49,7 @@ namespace D365_ExcelModifier.ViewModels
             }
         }
 
-        public void RemoveChangementRule() 
+        public void RemoveChangementRule()
         {
             if (ChangementRules.Count > 0)
             {
@@ -46,7 +62,7 @@ namespace D365_ExcelModifier.ViewModels
         #region Rules execution
         public void ExecuteCopyRules()
         {
-            foreach (Copyrule rule in CopyRules)
+            foreach (CopyRule rule in CopyRules)
             {
                 rule.InputFile = InputFile;
                 rule.OutputFile = OutputFile;

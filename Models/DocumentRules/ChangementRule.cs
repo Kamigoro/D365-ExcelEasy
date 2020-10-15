@@ -18,34 +18,31 @@ namespace D365_ExcelModifier.Models.DocumentRules
             {
                 using (var workbook = new XLWorkbook(InputFile))
                 {
-                    foreach (var worksheet in workbook.Worksheets)
+                    var cellsToReplace = workbook.FindCells(cell => cell.Value.ToString().StartsWith(OldValue));
+
+                    if (cellsToReplace.Count() == 0)
                     {
-                        //Find all the cells that starts by OldValue
-                        var cellsToReplace = worksheet.Cells().
-                            Where(cell =>
-                            cell.Value.ToString()
-                            .StartsWith(OldValue));
-                        //Replacing the value of the cells concerned
+                        RuleExecuted_EventHandler?.Invoke(this, new RuleEventArgs(this, false, "Nous n'avons pas trouvé de cellules contenant cette valeur"));
+                    }
+                    else
+                    {
                         foreach (var cell in cellsToReplace)
                         {
                             cell.Value = NewValue;
                         }
                     }
                     workbook.Save();
-                    RuleExecuted_EventHandler?.Invoke(this, new RuleEventArgs(this, true));
                 }
             }
             catch (ArgumentNullException e)
             {
                 RuleExecuted_EventHandler?.Invoke(this, new RuleEventArgs(this, false, "Nous n'avons pas trouvé de cellules contenant cette valeur"));
-                throw e;
             }
             catch (Exception e)
             {
                 RuleExecuted_EventHandler?.Invoke(this, new RuleEventArgs(this, false, e.Message));
-                throw e;
             }
-            
+
         }
     }
 }
