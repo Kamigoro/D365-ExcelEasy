@@ -26,7 +26,6 @@
                             Margin="0,20">
                     <TextBox x:Name="TBXInputFile"
                              Text="{Binding InputFile}"
-                             TextChanged="TBXInputFile_TextChanged"
                              Height="25" 
                              MinWidth="250"
                              materialDesign:HintAssist.Hint="Fichier Excel d'entrée"/>
@@ -98,9 +97,8 @@
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
                                 x:Name="BTNExecuteChangementRules"
                                 Click="BTNExecuteChangementRules_Click"
-                                IsEnabled="False"
                                 Content="{materialDesign:PackIcon Kind=TableCog}"
-                                Foreground="Red"
+                                Foreground="Green"
                                 ToolTip="Exécuter les règles" Cursor="Hand"/>
                     </StackPanel>
 

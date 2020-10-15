@@ -93,27 +93,9 @@ namespace D365_ExcelModifier
             }
         }
 
-        //Warning the user that he can't execute rules without an existing file
-        private void TBXInputFile_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (File.Exists(TBXInputFile.Text))
-            {
-                BTNExecuteChangementRules.Foreground = new SolidColorBrush(Colors.Green);
-                BTNExecuteChangementRules.IsEnabled = true;
-                ViewModel.InputFile = TBXInputFile.Text;
-            }
-            else
-            {
-                BTNExecuteChangementRules.Foreground = new SolidColorBrush(Colors.Red);
-                BTNExecuteChangementRules.IsEnabled = true;
-            }
-        }
-
         #endregion
 
         #region Rules execution
-
-        #region ValueChangement rules
 
         private void BTNExecuteChangementRules_Click(object sender, RoutedEventArgs e)
         {
@@ -122,8 +104,6 @@ namespace D365_ExcelModifier
             Thread executionThread = new Thread(ViewModel.ExecuteChangementRules);
             executionThread.Start();
         }
-
-        #endregion
 
         #endregion
 
