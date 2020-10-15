@@ -36,7 +36,7 @@ namespace D365_ExcelModifier.Models.DocumentRules
             }
             catch (ArgumentNullException e)
             {
-                RuleExecuted_EventHandler?.Invoke(this, new RuleEventArgs(this, false, "Nous n'avons pas trouvé de cellules contenant cette valeur"));
+                RuleExecuted_EventHandler?.Invoke(this, new RuleEventArgs(this, false, $"Nous n'avons pas trouvé de cellules contenant cette valeur\n{e.Message}"));
             }
             catch (Exception e)
             {

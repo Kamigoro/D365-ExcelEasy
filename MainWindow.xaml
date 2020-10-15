@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:D365_ExcelModifier"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="D365 Helper" Height="600" Width="720" Cursor="Hand">
-    <Grid Background="#C3C3C3">
+        Title="D365 Helper" Height="500" Width="720" Cursor="Hand">
+    <Grid>
 
         <!--Input-->
         <Grid>
@@ -15,21 +15,14 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0"
-                       Text="D365 Helper"
-                       Margin="0,20"
-                       HorizontalAlignment="Center"
-                       Style="{StaticResource MaterialDesignHeadline4TextBlock}"/>
-
             <!--Files picker-->
-            <StackPanel Grid.Row="1">
+            <StackPanel Grid.Row="0">
                 
                 <!--Input file-->
                 <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
+                            HorizontalAlignment="Center">
                     <TextBox x:Name="TBXInputFile"
                              Text="{Binding InputFile}"
                              TextChanged="TBXInputFile_TextChanged"
@@ -44,34 +37,13 @@
                             ToolTip="Choisir le fichier source"/>
                 </StackPanel>
                 
-                <!--Output file-->
-                <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                    <TextBox x:Name="TBXOutputFile"
-                             Text="{Binding OutputFile}"
-                             TextChanged="TBXOutputFile_TextChanged"
-                             Height="25" 
-                             MinWidth="250"
-                             materialDesign:HintAssist.Hint="Fichier excel de sortie"/>
-                    <Button x:Name="BTNSearchOutputFile"
-                            Click="BTNSearchOutputFile_Click"
-                            Style="{StaticResource MaterialDesignFlatButton}" 
-                            Content="{materialDesign:PackIcon Kind=File}"
-                            Foreground="#389BE1"/>
-                </StackPanel>
-                
             </StackPanel>
 
 
-            <Grid Grid.Row="2" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <Grid Grid.Row="1" HorizontalAlignment="Center">
 
                 <!--ValueChangementRules-->
-                <StackPanel Grid.Column="0" MinWidth="50" HorizontalAlignment="Center">
+                <StackPanel MinWidth="50" HorizontalAlignment="Center">
 
                     <TextBlock Text="Règle de changement de valeur"
                                HorizontalAlignment="Center"
@@ -119,60 +91,9 @@
                                              MessageQueue="{materialDesign:MessageQueue}"/>
 
                 </StackPanel>
-
-
-                <!--CopyInOtherFileRules-->
-                <StackPanel Grid.Column="2" MinWidth="50" HorizontalAlignment="Center">
-
-                    <TextBlock Text="Règle de copie de colonne"
-                               HorizontalAlignment="Center"
-                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-
-                    <ScrollViewer MaxHeight="200">
-                        <ItemsControl x:Name="CopyItems" ItemsSource="{Binding CopyRules}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border BorderBrush="#389BE1" BorderThickness="1" Margin="10,5" Height="30" MaxWidth="500">
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBox Text="{Binding InputColumn}" materialDesign:HintAssist.Hint="Nom colonne" Margin="10,0,0,0"/>
-                                            <TextBox Text="{Binding OutputColumn}" materialDesign:HintAssist.Hint="Colonne destination" Margin="10,0,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-
-                    <!--Adding CopyInOtherFile rule or removing last one-->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button x:Name="BTNAddCopyInOtherFileRule"
-                            Click="BTNAddCopyInOtherFileRule_Click"
-                            Background="#C3C3C3"
-                            Content="{materialDesign:PackIcon Kind=Plus}"
-                            ToolTip="Ajouter une nouvelle règle" Cursor="Hand"/>
-                        <Button x:Name="BTNCopyInOtherFileRemoveRule"
-                            Click="BTNRemoveCopyInOtherFileRule_Click"
-                            Background="#C3C3C3"
-                            Content="{materialDesign:PackIcon Kind=Minus}"
-                            ToolTip="Supprimer la dernière règle" Cursor="Hand"/>
-                        <!--Execute valuechangement rules Button-->
-                        <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                x:Name="BTNExecuteCopyRules"
-                                Click="BTNExecuteCopyRules_Click"
-                                IsEnabled="False"
-                                Content="{materialDesign:PackIcon Kind=TableCog}"
-                                Foreground="Red"
-                                ToolTip="Exécuter les règles"/>
-                    </StackPanel>
-
-                    <materialDesign:Snackbar x:Name="CopySnackbar"
-                                             MessageQueue="{materialDesign:MessageQueue}"/>
-
-                </StackPanel>
-                
             </Grid>
 
-            <TextBox Grid.Row="3"
+            <TextBox Grid.Row="2"
                      x:Name="TBKErrorMessage"
                      Margin="10,30"
                      Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
@@ -180,6 +101,7 @@
                      Height="100"
                      AcceptsReturn="True"
                      TextWrapping="Wrap"
+                     materialDesign:HintAssist.Hint="Les messages d'erreurs seront affichés ici..."
                      VerticalScrollBarVisibility="Auto">
             </TextBox>
 
