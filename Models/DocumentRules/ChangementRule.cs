@@ -18,7 +18,7 @@ namespace D365_ExcelModifier.Models.DocumentRules
             {
                 using (var workbook = new XLWorkbook(InputFile))
                 {
-                    var cellsToReplace = workbook.FindCells(cell => cell.Value.ToString().StartsWith(OldValue));
+                    var cellsToReplace = workbook.Search(OldValue);
 
                     if (cellsToReplace.Count() == 0)
                     {
@@ -31,6 +31,7 @@ namespace D365_ExcelModifier.Models.DocumentRules
                             cell.Value = NewValue;
                         }
                     }
+                    RuleExecuted_EventHandler?.Invoke(this, new RuleEventArgs(this, true));
                     workbook.Save();
                 }
             }
